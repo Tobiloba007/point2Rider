@@ -1,31 +1,12 @@
-import { View, Text, SafeAreaView, StatusBar, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Dimensions, Pressable, Platform, Image } from 'react-native'
+import { View, Text, SafeAreaView, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Dimensions, Pressable, Platform, Image } from 'react-native'
 import React, { useState } from 'react'
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { Formik } from "formik";
-import * as Yup from "yup";
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialIcons } from '@expo/vector-icons';
 import { SimpleLineIcons } from '@expo/vector-icons';
 
 
-
-const SignupSchema = Yup.object().shape({
-  first_name: Yup.string().min(2).max(50).required(),
-  last_name: Yup.string().min(2).max(50).required(),
-  phone_number: Yup.string().required().matches(/^(80|81|90|70|91)\d{8}$/),
-  email: Yup.string().email("Invalid email").required(),
-  address: Yup.string().min(3).max(50).required(),
-  full_name: Yup.string().min(3).max(50).required(),
-  kin_number: Yup.string().required().matches(/^(80|81|90|70|91)\d{8}$/),
-  password: Yup.string()
-    .min(8)
-    .required()
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/),
-    password_confirmation: Yup.string()
-    .required('Confirm Password is required')
-    .oneOf([Yup.ref('password'), null], 'Passwords must match'),
-});
 
 
 export default function Register2() {

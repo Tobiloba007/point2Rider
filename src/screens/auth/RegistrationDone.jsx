@@ -1,6 +1,5 @@
 import { View, Text, SafeAreaView, StatusBar, TouchableOpacity } from 'react-native'
 import React from 'react'
-import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 

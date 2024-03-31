@@ -10,13 +10,18 @@ import Register from './screens/auth/Register';
 import VerifyAccount from './screens/auth/VerifyAccount';
 import RegistrationDone from './screens/auth/RegistrationDone';
 import Register2 from './screens/auth/Register2';
+import Tab from './screens/Tab';
+import ViewDetails from './screens/ViewDetails';
+import TrackPackage from './screens/TrackPackage';
+import Delivered from './screens/Delivered';
+import ChatScreen from './components/homePage/ChatScreen';
 
 const Stack = createStackNavigator();
 
 const AppStack = () => {
 
   return (
-    <Stack.Navigator initialRouteName="splash1">
+    <Stack.Navigator initialRouteName="tab">
       <Stack.Screen name="splash1" component={Splash1} options={{headerShown: false}} />
       <Stack.Screen name="splash2" component={Splash2} options={{headerShown: false}} />
       <Stack.Screen name="login" component={Login} options={{headerShown: false}} />
@@ -28,6 +33,11 @@ const AppStack = () => {
       <Stack.Screen name="verifyOtp" component={VerifyOtp} options={{headerShown: false}} />
       <Stack.Screen name="createNewPassword" component={CreateNewPassword} options={{headerShown: false}} />
       <Stack.Screen name="resetSuccess" component={ResetSuccess} options={{headerShown: false}} />
+      <Stack.Screen name="tab" component={Tab} options={{headerShown: false}} />
+      <Stack.Screen name="viewDetails" component={ViewDetails} options={{headerShown: false}} />
+      <Stack.Screen name="trackPackage" component={TrackPackage} options={{headerShown: false}} />
+      <Stack.Screen name="delivered" component={Delivered} options={{headerShown: false}} />
+      <Stack.Screen name="chatScreen" component={ChatScreen} options={{headerShown: false}} />
     </Stack.Navigator>
   );
 };
