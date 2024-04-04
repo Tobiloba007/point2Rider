@@ -17,12 +17,16 @@ import DeleteOrder from '../components/homePage/DeleteOrder'
 import ReasonModal from '../components/homePage/ReasonModal'
 import Deliveries from './Deliveries'
 import Notifications from './Notifications'
+import ProfilePage from './ProfilePage'
+import DeleteModal from '../components/profilePage/DeleteModal'
+import EarningPage from './EarningPage'
 
 
 export default function Tab() {
   const [tab, setTab] = useState('Home')
   const [inputModal, setInputModal] = useState(false)
   const [deleteCard, setDeleteCard] = useState(false)
+  const [deleteBank, setDeleteBank] = useState(false)
   const [deleted, setDeleted] = useState(false)
   const [reason, setReason] = useState(false)
   const [location, setLocation] = useState('')
@@ -41,7 +45,9 @@ export default function Tab() {
            {
                tab === 'Home' ? <HomePage setDeleteCard={setDeleteCard} deleted={deleted} />
               : tab === 'Deliveries' ? <Deliveries/>
-              : tab === 'Notification' && <Notifications/>
+              : tab === 'Notification' ? <Notifications/>
+              : tab === 'Profile' ? <ProfilePage setDeleteBank={setDeleteBank} />
+              : tab === 'Earnings' && <EarningPage />
            }
         </View>
 
@@ -122,6 +128,13 @@ export default function Tab() {
 
           </View>
         }
+
+        {deleteBank &&
+         <Pressable onPress={()=>setDeleteCard(false)}
+         className='absolute w-full h-full bg-[#A4A4A4] opacity-60'></Pressable>
+         }
+ 
+         {deleteBank && <DeleteModal setDeleteBank={setDeleteBank} />}
 
         {deleteCard &&
          <Pressable onPress={()=>setDeleteCard(false)}

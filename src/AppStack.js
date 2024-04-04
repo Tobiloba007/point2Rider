@@ -15,13 +15,17 @@ import ViewDetails from './screens/ViewDetails';
 import TrackPackage from './screens/TrackPackage';
 import Delivered from './screens/Delivered';
 import ChatScreen from './components/homePage/ChatScreen';
+import BankAccountSuccess from './components/profilePage/BankAccountSuccess';
+import PaymentHistory from './screens/PaymentHistory';
+import TransactionSummary from './screens/TransactionSummary';
+import ReportIssue from './screens/ReportIssue';
 
 const Stack = createStackNavigator();
 
 const AppStack = () => {
 
   return (
-    <Stack.Navigator initialRouteName="tab">
+    <Stack.Navigator initialRouteName="splash1">
       <Stack.Screen name="splash1" component={Splash1} options={{headerShown: false}} />
       <Stack.Screen name="splash2" component={Splash2} options={{headerShown: false}} />
       <Stack.Screen name="login" component={Login} options={{headerShown: false}} />
@@ -38,6 +42,10 @@ const AppStack = () => {
       <Stack.Screen name="trackPackage" component={TrackPackage} options={{headerShown: false}} />
       <Stack.Screen name="delivered" component={Delivered} options={{headerShown: false}} />
       <Stack.Screen name="chatScreen" component={ChatScreen} options={{headerShown: false}} />
+      <Stack.Screen name="bankAccountSuccess" component={BankAccountSuccess} options={{headerShown: false}} />
+      <Stack.Screen name="paymentHistory" component={PaymentHistory} options={{headerShown: false}} />
+      <Stack.Screen name="transactionSummary" component={TransactionSummary} options={{headerShown: false}} />
+      <Stack.Screen name="reportIssue" component={ReportIssue} options={{headerShown: false}} />
     </Stack.Navigator>
   );
 };
