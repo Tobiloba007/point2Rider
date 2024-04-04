@@ -15,6 +15,8 @@ import { Fontisto } from '@expo/vector-icons';
 import HomePage from './HomePage'
 import DeleteOrder from '../components/homePage/DeleteOrder'
 import ReasonModal from '../components/homePage/ReasonModal'
+import Deliveries from './Deliveries'
+import Notifications from './Notifications'
 
 
 export default function Tab() {
@@ -37,7 +39,9 @@ export default function Tab() {
 
         <View className='flex-1'>
            {
-              tab === 'Home' && <HomePage setDeleteCard={setDeleteCard} deleted={deleted} />
+               tab === 'Home' ? <HomePage setDeleteCard={setDeleteCard} deleted={deleted} />
+              : tab === 'Deliveries' ? <Deliveries/>
+              : tab === 'Notification' && <Notifications/>
            }
         </View>
 
