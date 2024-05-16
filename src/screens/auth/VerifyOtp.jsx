@@ -1,10 +1,16 @@
-import { View, Text, SafeAreaView, StatusBar, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
+import { View, Text, SafeAreaView, StatusBar, TextInput, TouchableOpacity, KeyboardAvoidingView, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux'
+import { forgotPasswordToken, resendVerifyToken } from '../../features/actions/Authentication';
 
-export default function VerifyOtp() {
+
+
+export default function VerifyOtp({ route }) {
+  const { email } = route.params;
+
     const navigation = useNavigation()
     const [otp, setOtp] = useState(['', '', '', '']);
 
@@ -22,11 +28,12 @@ export default function VerifyOtp() {
     const initialCount = 30;
     const [count, setCount] = useState(initialCount);
     const [startCountdown, setStartCountdown] = useState(false);
+    const [error, setError] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [loadResend, setLoadResend] = useState(false);
+    const [resendError, setResendError] = useState(false);
 
 
-    const handleResend = () => {
-        setStartCountdown(true)
-    }
 
     useEffect(() => {
         let interval;
@@ -51,6 +58,26 @@ export default function VerifyOtp() {
     
       }, [startCountdown, count]);
 
+      const joinOtp = otp.join("")
+      const values = {'verification_token': parseInt(joinOtp)}
+
+      const resend = {'email': email}
+
+      const dispatch = useDispatch()
+
+      const handleResend = () => {
+        dispatch(resendVerifyToken(resend, setLoadResend, setError, setResendError, setStartCountdown))
+        // navigation.navigate('createNewPassword', { mail: email })
+        // setStartCountdown(true)
+        // console.log(resend)
+      }
+
+      const handleSubmit = () => {
+        dispatch(forgotPasswordToken(values, setLoading, setError, setResendError, navigation, email))
+        // navigation.navigate('createNewPassword', { mail: email })
+        console.log(values)
+      }
+
 
   return (
     <SafeAreaView className="flex-1 items-center justify-start px-5 bg-white pt-8">
@@ -65,7 +92,7 @@ export default function VerifyOtp() {
          <Text className={`text-2xl text-[#475467] font-['bold']`}>Verify OTP</Text>
 
          <View className="relative flex flex-row items-center justify-starrt w-full">
-             <Text className={`text-sm text-[#475467] font-['medium'] mt-3`}>Enter the 4-digit code we sent to email@email.com and
+             <Text className={`text-sm text-[#475467] font-['medium'] mt-3`}>Enter the 4-digit code we sent to {email} and
              <Text className={`text-sm text-[#475467] font-['bold']`}> +2349084651462</Text>
              <Text onPress={()=>navigation.navigate('')} 
              className={`text-sm text-[#0077B6] font-['bold']`}> Change Phone number</Text>
@@ -97,9 +124,14 @@ export default function VerifyOtp() {
     </View>
 
     <View className="flex items-center justify-center w-full mt-12">
-          <TouchableOpacity onPress={()=>navigation.navigate('createNewPassword')}
+          <Text className={`text-sm text-red-500 font-['medium'] mb-4 w-full text-start`}>{error}</Text>
+          <TouchableOpacity onPress={handleSubmit}
+          disabled={!otp}
           className="flex items-center justify-center h-12 w-full rounded-lg bg-[#0077B6]">
-              <Text className={`text-base font-[bold] text-white`}>Verify</Text>
+              {loading
+              ?<ActivityIndicator size="large" color="#ffffff" />
+              :<Text className={`text-base font-[bold] text-white`}>Verify</Text>
+              }
           </TouchableOpacity>
     </View>
 
@@ -113,12 +145,17 @@ export default function VerifyOtp() {
               </Text>
           </TouchableOpacity>
         : count === 30 &&
-        <TouchableOpacity onPress={handleResend}>
+        <TouchableOpacity onPress={handleResend} 
+                  className='flex flex-row items-center justify-center'>
             <Text className={`text-sm font-[medium] text-[#0077B6]`}>
             Tap to resend OTP
             </Text>
+            {loadResend &&<View className='ml-2 mt-1'><ActivityIndicator size="small" /></View>}
         </TouchableOpacity>
         }
+        <Text className={`text-xs text-red-500 font-['medium'] w-full text-center mt-4 ${resendError == 'OTP Code Sent' && 'text-green-600'}`}>
+             {resendError}
+        </Text>
     </View>
 
     </KeyboardAvoidingView>

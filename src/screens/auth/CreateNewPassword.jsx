@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, StatusBar, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Dimensions } from 'react-native'
+import { View, Text, SafeAreaView, StatusBar, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Dimensions, ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
@@ -8,6 +8,9 @@ import EyeSlash from '../../../assets/icon/eye-slash.svg'
 import { FontAwesome6 } from '@expo/vector-icons';
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { changePassword } from '../../features/actions/Authentication';
+import { useDispatch } from 'react-redux'
+
 
 
 const newPasswordSchema = Yup.object().shape({
@@ -20,15 +23,27 @@ const newPasswordSchema = Yup.object().shape({
     .oneOf([Yup.ref('password'), null], 'Passwords must match'),
 });
 
-export default function CreateNewPassword() {
+export default function CreateNewPassword({route}) {
+  const { mail } = route.params;
+
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const [eye, setEye] = useState(false)
     const navigation = useNavigation();
 
     const screenWidth = Dimensions.get('window').width;
 
+    const dispatch = useDispatch()
+
+
+    const email = {'email': mail}
+
     const handleSubmit = async (values) => {
-      navigation.navigate('resetSuccess')
-      // console.log(values)
+      const combinedValues = {...values, ...email}
+      dispatch(changePassword(combinedValues, setLoading, setError, navigation))
+      // navigation.navigate('resetSuccess')
+      console.log(combinedValues)
     }
 
   return (
@@ -71,7 +86,7 @@ export default function CreateNewPassword() {
 
               {/* PASSWORD */}
             <View className="relative items-start justify-start w-full mt-3">
-                  <Text className={`text-sm text-[#101828] font-['bold'] mt-3`}>New Password</Text>
+                  <Text className={`text-sm text-[#101828] font-['bold'] mt-3`}>Password</Text>
                   <TextInput className={`mt-3 border-[1px] border-[#D0D5DD] rounded-lg h-12 w-full text-base font-['regular']
                    text-[#344054] pl-5 ${touched.password && errors.password && 'border-red-500'} 
                    ${touched.password && !errors.password && 'border-[#0077B6]'}`}
@@ -135,11 +150,15 @@ export default function CreateNewPassword() {
             </View>
 
               {/* BUTTON */}
-            <View className="flex items-center justify-center w-full mt-20">
+            <View className="flex items-center justify-center w-full mt-14">
+                  <Text className={`text-sm text-red-500 font-['medium'] mb-4 w-full text-start`}>{error}</Text>
                   <TouchableOpacity onPress={handleSubmit}
                   disabled={!isValid} 
                   className={`flex items-center justify-center h-12 w-full rounded-lg bg-[#0077B6] ${!isValid && 'opacity-30'}`}>
-                      <Text className={`text-base font-[bold] text-white`}>Reset Password</Text>
+                      {loading
+                      ?<ActivityIndicator size="large" color="#ffffff" />
+                      :<Text className={`text-base font-[bold] text-white`}>Reset Password</Text>
+                      }
                   </TouchableOpacity>
             </View>
 

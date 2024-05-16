@@ -8,7 +8,7 @@ import Success from '../../assets/icon/success.svg'
 
 const Delivered = () => {
     const [code, setCode] = useState('')
-    const [submitted, setSubmitted] = useState(false)
+    const [submitted, setSubmitted] = useState(true)
 
     const navigation = useNavigation();
 
@@ -32,6 +32,7 @@ const Delivered = () => {
         </View>
         }
 
+        
         {
         !submitted
         ?<ScrollView contentContainerStyle={{width: '100%', alignItems: 'center', paddingBottom: 60 }}

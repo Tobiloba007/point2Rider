@@ -16,11 +16,11 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 const SignupSchema = Yup.object().shape({
   first_name: Yup.string().min(2).max(50).required(),
   last_name: Yup.string().min(2).max(50).required(),
-  phone_number: Yup.string().required().matches(/^(80|81|90|70|91)\d{8}$/),
+  phone: Yup.string().required().matches(/^(080|081|090|070|091)\d{8}$/),
   email: Yup.string().email("Invalid email").required(),
   address: Yup.string().min(3).max(50).required(),
-  full_name: Yup.string().min(3).max(50).required(),
-  kin_number: Yup.string().required().matches(/^(80|81|90|70|91)\d{8}$/),
+  next_of_kin_full_name: Yup.string().min(3).max(50).required(),
+  next_of_kin_phone_no: Yup.string().required().matches(/^(080|081|090|070|091)\d{8}$/),
   password: Yup.string()
     .min(8)
     .required()
@@ -54,7 +54,7 @@ export default function Register() {
     const dob = {'dob': date === null ? '' : date.toLocaleDateString()}
 
     const handleSubmit = async (values) => {
-      navigation.navigate('register2')
+      navigation.navigate('register2', {values})
       const combinedData = {...values, ...dob}
       console.log(combinedData)
     }
@@ -99,11 +99,11 @@ export default function Register() {
           initialValues={{
             first_name: "",
             last_name: "",
-            phone_number: "",
+            phone: "",
             email: "",
             address: "",
-            full_name: "",
-            kin_number: "",
+            next_of_kin_full_name: "",
+            next_of_kin_phone_no: "",
             password: "",
             password_confirmation: "",
           }}
@@ -177,16 +177,16 @@ export default function Register() {
            <View className="relative items-start justify-start w-full mt-3">
                   <Text className={`text-sm text-[#101828] font-['bold'] mt-3`}>Phone number</Text>
                   <TextInput className={`mt-3 border-[1px] border-[#D0D5DD] rounded-lg h-12 w-full text-base font-['regular']
-                   text-[#344054] pl-[87px] ${touched.phone_number && errors.phone_number && 'border-red-500'} 
-                   ${touched.phone_number && !errors.phone_number && 'border-[#0077B6]'}`}
+                   text-[#344054] pl-[87px] ${touched.phone && errors.phone && 'border-red-500'} 
+                   ${touched.phone && !errors.phone && 'border-[#0077B6]'}`}
                   placeholder='90 0000 0000'
                   placeholderTextColor={'#667085'}
-                  values={values.phone_number}
-                  onChangeText={handleChange("phone_number")}
-                  onBlur={() => setFieldTouched("phone_number")}
+                  values={values.phone}
+                  onChangeText={handleChange("phone")}
+                  onBlur={() => setFieldTouched("phone")}
                   keyboardType='number-pad'
                   />
-                  {touched.phone_number && errors.phone_number && <Text className='text-red-500 text-[10px] pt-1'>invalid phone number format</Text>}
+                  {touched.phone && errors.phone && <Text className='text-red-500 text-[10px] pt-1'>invalid phone number format</Text>}
                   <View className="absolute top-14 left-4 flex flex-row items-center justify-start">
                       <Text className={`text-base text-[#101828] font-['regular'] mr-1`}>+234</Text>
                       <SimpleLineIcons name="arrow-down" size={12} color="#667085" />
@@ -285,37 +285,37 @@ export default function Register() {
             {/* NEXT OF KIN */}
             <Text className={`w-full text-xs text-[#667085] font-['medium'] mt-10`}>NEXT OF KIN</Text>
             
-            {/* FULL NAME */}
+            {/* NEXT OF KIN FULL NAME */}
             <View className="relative items-start justify-start w-full mt-2">
                   <Text className={`text-sm text-[#101828] font-['bold'] mt-3`}>Full Name</Text>
                   <TextInput className={`mt-3 border-[1px] border-[#D0D5DD] rounded-lg h-12 w-full text-base font-['regular'] 
-                  text-[#344054] pl-5 ${touched.full_name && errors.full_name && 'border-red-500'} 
-                  ${touched.full_name && !errors.full_name && 'border-[#0077B6]'}`}
-                  placeholder='full_name'
+                  text-[#344054] pl-5 ${touched.next_of_kin_full_name && errors.next_of_kin_full_name && 'border-red-500'} 
+                  ${touched.next_of_kin_full_name && !errors.next_of_kin_full_name && 'border-[#0077B6]'}`}
+                  placeholder='Full Name'
                   placeholderTextColor={'#667085'}
-                  values={values.full_name}
-                  onChangeText={handleChange("full_name")}
-                  onBlur={() => setFieldTouched("full_name")}
+                  values={values.next_of_kin_full_name}
+                  onChangeText={handleChange("next_of_kin_full_name")}
+                  onBlur={() => setFieldTouched("next_of_kin_full_name")}
                   keyboardType='default'
                   />
-                  {touched.full_name && errors.full_name && 
+                  {touched.next_of_kin_full_name && errors.next_of_kin_full_name && 
                     <Text className='text-red-500 text-[10px] pt-1'>minimum of 2 letters</Text>}
             </View>
 
-            {/* PHONE */}
+            {/* NEXT OF KIN PHONE NUMBER */}
            <View className="relative items-start justify-start w-full mt-3">
                   <Text className={`text-sm text-[#101828] font-['bold'] mt-3`}>Phone number</Text>
                   <TextInput className={`mt-3 border-[1px] border-[#D0D5DD] rounded-lg h-12 w-full text-base font-['regular']
-                   text-[#344054] pl-[87px] ${touched.kin_number && errors.kin_number && 'border-red-500'} 
-                   ${touched.kin_number && !errors.kin_number && 'border-[#0077B6]'}`}
+                   text-[#344054] pl-[87px] ${touched.next_of_kin_phone_no && errors.next_of_kin_phone_no && 'border-red-500'} 
+                   ${touched.next_of_kin_phone_no && !errors.next_of_kin_phone_no && 'border-[#0077B6]'}`}
                   placeholder='90 0000 0000'
                   placeholderTextColor={'#667085'}
-                  values={values.kin_number}
-                  onChangeText={handleChange("kin_number")}
-                  onBlur={() => setFieldTouched("kin_number")}
+                  values={values.next_of_kin_phone_no}
+                  onChangeText={handleChange("next_of_kin_phone_no")}
+                  onBlur={() => setFieldTouched("next_of_kin_phone_no")}
                   keyboardType='number-pad'
                   />
-                  {touched.kin_number && errors.kin_number && <Text className='text-red-500 text-[10px] pt-1'>invalid phone number format</Text>}
+                  {touched.next_of_kin_phone_no && errors.next_of_kin_phone_no && <Text className='text-red-500 text-[10px] pt-1'>invalid phone number format</Text>}
                   <View className="absolute top-14 left-4 flex flex-row items-center justify-start">
                       <Text className={`text-base text-[#101828] font-['regular'] mr-1`}>+234</Text>
                       <SimpleLineIcons name="arrow-down" size={12} color="#667085" />

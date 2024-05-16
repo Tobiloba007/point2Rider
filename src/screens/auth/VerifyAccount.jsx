@@ -1,10 +1,16 @@
-import { View, Text, SafeAreaView, StatusBar, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
+import { View, Text, SafeAreaView, StatusBar, TextInput, TouchableOpacity, KeyboardAvoidingView, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { verifyAccount } from '../../features/actions/Authentication';
+import { useDispatch } from 'react-redux'
 
-export default function VerifyAccount() {
+
+
+export default function VerifyAccount({ route }) {
+    const { email, phone } = route.params;
+
     const navigation = useNavigation()
     const [otp, setOtp] = useState(['', '', '', '']);
 
@@ -22,6 +28,8 @@ export default function VerifyAccount() {
     const initialCount = 30;
     const [count, setCount] = useState(initialCount);
     const [startCountdown, setStartCountdown] = useState(false);
+    const [error, setError] = useState(false);
+    const [loading, setLoading] = useState(false);
 
 
     const handleResend = () => {
@@ -51,6 +59,17 @@ export default function VerifyAccount() {
     
       }, [startCountdown, count]);
 
+      const joinOtp = otp.join("")
+      const values = {'verification_token': parseInt(joinOtp)}
+
+      const dispatch = useDispatch()
+
+
+      const handleSubmit = () => {
+        dispatch(verifyAccount(values, setLoading, setError, navigation))
+        console.log(values, 'PIN')
+      }
+
 
   return (
     <SafeAreaView className="flex-1 items-center justify-start px-5 bg-white pt-8">
@@ -65,9 +84,9 @@ export default function VerifyAccount() {
          <Text className={`text-2xl text-[#475467] font-['bold']`}>Verify your account</Text>
 
          <View className="relative flex flex-row items-center justify-starrt w-full">
-             <Text className={`text-sm text-[#475467] font-['medium'] mt-3`}>Enter the 4-digit code we sent to email@email.com and
-             <Text className={`text-sm text-[#475467] font-['bold']`}> +2349084651462</Text>
-             <Text onPress={()=>navigation.navigate('')} 
+             <Text className={`text-sm text-[#475467] font-['medium'] mt-3`}>Enter the 4-digit code we sent to {email} and
+'             <Text className={`text-sm text-[#475467] font-['bold']`}> {phone}</Text>
+'             <Text onPress={()=>navigation.navigate('')} 
              className={`text-sm text-[#0077B6] font-['bold']`}> Change Phone number</Text>
              </Text>
          </View>
@@ -97,9 +116,13 @@ export default function VerifyAccount() {
     </View>
 
     <View className="flex items-center justify-center w-full mt-12">
-          <TouchableOpacity onPress={()=>navigation.navigate('registrationDone')}
+          <Text className={`text-sm text-red-500 font-['medium'] mb-4 w-full text-start`}>{error}</Text>
+          <TouchableOpacity onPress={handleSubmit}
           className="flex items-center justify-center h-12 w-full rounded-lg bg-[#0077B6]">
-              <Text className={`text-base font-[bold] text-white`}>Verify my account</Text>
+              {loading
+              ?<ActivityIndicator size="large" color="#ffffff" />
+              :<Text className={`text-base font-[bold] text-white`}>Verify my account</Text>
+              }
           </TouchableOpacity>
     </View>
 

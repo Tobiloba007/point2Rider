@@ -1,26 +1,42 @@
-import { View, Text, SafeAreaView, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Dimensions, Pressable, Platform, Image } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, SafeAreaView, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Dimensions, Pressable, Platform, Image, ActivityIndicator } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialIcons } from '@expo/vector-icons';
 import { SimpleLineIcons } from '@expo/vector-icons';
+import { useDispatch } from 'react-redux'
+import { getBanks, registerAccount } from '../../features/actions/Authentication';
 
 
 
+export default function Register2({route}) {
+      // const { values } = route.params;
+    const values = {'email': 'example@gmail.com'}
 
-export default function Register2() {
     const [idPhoto, setIdPhoto] = useState(null);
+    const [passport, setPassport] = useState(null);
     const [bikePhoto, setBikePhoto] = useState(null);
     const [bikeLicense, setBikeLicense] = useState(null);
     const [roadPapers, setRoadPapers] = useState(null);
     const [ridersCard, setRidersCard] = useState(null);
     const [account, setAccount] = useState(''); 
     const [accountError, setAccountError] = useState(''); 
+    const [bvn, setBvn] = useState(''); 
+    const [bvnError, setBvnError] = useState(''); 
+    const [nin, setNin] = useState(''); 
+    const [ninError, setNinError] = useState(''); 
     const [openDropdown, setOpenDropdown] = useState(false); 
     const [selectedBank, setSelectedBank] = useState('Select Bank'); 
     const [name, setName] = useState(''); 
     const [nameError, setNameError] = useState(''); 
+    const [bank, setBanks] = useState([])
+    const [loadBank, setLoadBanks] = useState(false)
+    const [bikeNumber, setBikeNumber] = useState(''); 
+    const [bikeNumError, setBikeNumError] = useState(''); 
+    const [message, setMessage] = useState('')
+    const [error, setError] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const banks = ['Access Bank', 'Fidelity Bank', 'United Bank For Africa', 'Guaranty Trust Bank', 'Eco Bank', 'Diamond Bank', 'Sterling Bank', 'Union Bank', 'Wema Bank']
 
@@ -28,6 +44,12 @@ export default function Register2() {
         setSelectedBank(item)
         setOpenDropdown(false)
     }
+
+    const dispatch = useDispatch()
+
+//     useEffect(()=>{
+//       dispatch(getBanks(setBanks, setLoadBanks, setMessage))
+//     },[dispatch])
 
 
     //    PICK PHOTO ID
@@ -39,10 +61,26 @@ export default function Register2() {
           quality: 1,
         });
 
-        console.log(result.uri);
+        console.log(result.assets[0].uri);
     
         if (!result.canceled) {
             setIdPhoto(result.assets[0].uri);
+        }
+      };
+
+    //    PASSPORT PHOTOGRAPGH
+    const pickPassportId = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          allowsEditing: true,
+          aspect: [4, 4],
+          quality: 1,
+        });
+
+        console.log(result.assets[0].uri);
+    
+        if (!result.canceled) {
+            setPassport(result.assets[0].uri);
         }
       };
 
@@ -55,7 +93,7 @@ export default function Register2() {
           quality: 1,
         });
 
-        console.log(result.uri);
+        console.log(result.assets[0].uri);
     
         if (!result.canceled) {
             setBikePhoto(result.assets[0].uri);
@@ -71,7 +109,7 @@ export default function Register2() {
           quality: 1,
         });
 
-        console.log(result.uri);
+        console.log(result.assets[0].uri);
     
         if (!result.canceled) {
             setBikeLicense(result.assets[0].uri);
@@ -87,7 +125,7 @@ export default function Register2() {
           quality: 1,
         });
 
-        console.log(result.uri);
+        console.log(result.assets[0].uri);
     
         if (!result.canceled) {
             setRoadPapers(result.assets[0].uri);
@@ -103,7 +141,7 @@ export default function Register2() {
           quality: 1,
         });
 
-        console.log(result.uri);
+        console.log(result.assets[0].uri);
     
         if (!result.canceled) {
             setRidersCard(result.assets[0].uri);
@@ -115,13 +153,23 @@ export default function Register2() {
 
     const screenWidth = Dimensions.get('window').width;
 
-    const valid =  idPhoto === null || bikePhoto === null || bikeLicense === null || roadPapers === null || ridersCard === null || account === '' || selectedBank === 'Select Bank' || name === ''
+    const valid =  idPhoto === null || passport === null || bikePhoto === null || bikeLicense === null || roadPapers === null 
+                   || bikeNumber === '' || ridersCard === null || account === '' || selectedBank === 'Select Bank' || name === '' || bvn === '' || nin === ''
 
-    const values = {'id_photo': idPhoto, 'bike_photo': bikePhoto, 'bike_license': bikeLicense, 'road_papers': roadPapers, 'riders_card': ridersCard, 'account_number': account, 'bank': selectedBank, 'account_name': name}
+    const values2 = {'id_card': idPhoto, 'passport': passport, 'bike_photo': bikePhoto, 'bike_license': bikeLicense, 'road_worthiness': roadPapers, 
+                     'riders_card': ridersCard, 'account_no': account, 'bank': selectedBank, 'bank_code': '044', 'bvn': bvn, 'nin': nin, 'bike_number': bikeNumber}
+
+    const combinedValues = {...values, ...values2}
 
     const handleSubmit = () => {
       navigation.navigate('verifyAccount')
-      console.log(values)
+      const formData = new FormData();
+            Object.keys(combinedValues).forEach((key) => {
+              formData.append(key, combinedValues[key]);
+            });
+      dispatch(registerAccount(formData, setError, setLoading, navigation))
+      // console.log(combinedValues, 'two')
+      // console.log(values2)
     }
 
   return (
@@ -165,7 +213,7 @@ export default function Register2() {
                           {/* VALID ID PHOTO */}
             <Text className={`w-full text-xs text-[#667085] font-['medium'] mt-5`}>IDENTIFICATION</Text>
             <View className="relative items-start justify-start w-full mt-1">
-                  <Text className={`text-sm text-[#101828] font-['bold'] mt-3`}>Valid ID Photo</Text>
+                  <Text className={`text-sm text-[#101828] font-['bold'] mt-3`}>Valid ID</Text>
                   <TouchableOpacity onPress={pickPhotoId} className={`flex items-center justify-center mt-3 px-8 border-[1px]
                      border-[#D0D5DD] rounded-lg h-[154px] w-full text-base font-['regular'] ${idPhoto && 'border-[#0077B6]'}`}>
                        {idPhoto
@@ -178,6 +226,26 @@ export default function Register2() {
                         :<Text className={`text-center text-[#667085] text-sm font-['regular'] pt-1`}>
                             Upload (NIN, Drivers License, Voters Card)
                             (png/jpeg/pdf formats)
+                       </Text>
+                       }
+                  </TouchableOpacity>
+            </View>
+
+                            {/* VALID PASSPORT PHOTOGRAPH */}
+            <View className="relative items-start justify-start w-full mt-1">
+                  <Text className={`text-sm text-[#101828] font-['bold'] mt-3`}>Passport Photograph</Text>
+                  <TouchableOpacity onPress={pickPassportId} className={`flex items-center justify-center mt-3 px-8 border-[1px]
+                     border-[#D0D5DD] rounded-lg h-[154px] w-full text-base font-['regular'] ${passport && 'border-[#0077B6]'}`}>
+                       {passport
+                        ?<View className='flex flex-col items-center w-full px-8'>
+                            <MaterialIcons name="verified" size={32} color="#27AE60" />
+                            <Text className={`text-center text-[#667085] text-sm font-['regular'] mt-2`}>
+                                  passport hotograph successfully uploaded
+                            </Text>
+                        </View>
+                        :<Text className={`text-center text-[#667085] text-sm font-['regular'] pt-1`}>
+                            Upload your modt recent photograpgh
+                            (png/jpeg/jpg formats)
                        </Text>
                        }
                   </TouchableOpacity>
@@ -243,9 +311,51 @@ export default function Register2() {
                   />
             </View>
 
+            {/* BANK VERIFICATION NUMBER */}
+            <View className="relative items-start justify-start w-full mt-1">
+                  <Text className={`text-sm text-[#101828] font-['bold'] mt-3`}>Bank Verification Number (BVN)</Text>
+                  <TextInput className={`mt-3 border-[1px] border-[#D0D5DD] rounded-lg h-12 w-full text-base font-['regular'] 
+                  text-[#344054] pl-5 ${bvnError && 'border-red-500'}`}
+                  placeholder='Enter BVN'
+                  placeholderTextColor={'#667085'}
+                  value={bvn}
+                  onChangeText={(text) => setBvn(text)}
+                  onBlur={()=>setBvnError(!/^\d{11}$/.test(bvn))}
+                  keyboardType='number-pad'
+                  />
+            </View>
+
+            {/* NIN */}
+            <View className="relative items-start justify-start w-full mt-1">
+                  <Text className={`text-sm text-[#101828] font-['bold'] mt-3`}>NIN</Text>
+                  <TextInput className={`mt-3 border-[1px] border-[#D0D5DD] rounded-lg h-12 w-full text-base font-['regular'] 
+                  text-[#344054] pl-5 ${ninError && 'border-red-500'}`}
+                  placeholder='Enter NIN'
+                  placeholderTextColor={'#667085'}
+                  value={nin}
+                  onChangeText={(text) => setNin(text)}
+                  onBlur={()=>setNinError(!/^\d{11}$/.test(nin))}
+                  keyboardType='number-pad'
+                  />
+            </View>
+
 
             {/* BIKE DETAILS */}
             <Text className={`w-full text-xs text-[#667085] font-['medium'] mt-8`}>BIKE DETAILS</Text>
+            {/* BIKE NUMBER */}
+            <View className="relative items-start justify-start w-full mt-1">
+                  <Text className={`text-sm text-[#101828] font-['bold'] mt-3`}>Bike Number</Text>
+                  <TextInput className={`mt-3 border-[1px] border-[#D0D5DD] rounded-lg h-12 w-full text-base font-['regular'] 
+                  text-[#344054] pl-5 ${bikeNumError && 'border-red-500'}`}
+                  placeholder='Bike Number'
+                  placeholderTextColor={'#667085'}
+                  value={bikeNumber}
+                  onChangeText={(text) => setBikeNumber(text)}
+                  onBlur={()=>setBikeNumError(bikeNumber.trim().length <= 5)}
+                  keyboardType='default'
+                  />
+            </View>
+
             <View className="relative items-start justify-start w-full mt-1">
                   <Text className={`text-sm text-[#101828] font-['bold'] mt-3`}>Bike Photo</Text>
                   <TouchableOpacity onPress={pickBikePhoto} className={`flex items-center justify-center mt-3 px-8 border-[1px]
@@ -330,10 +440,14 @@ export default function Register2() {
 
               {/* BUTTON */}
             <View className="flex items-center justify-center w-full mt-16">
+                  <Text className={`text-sm text-red-500 font-['medium'] mb-4 w-full text-start`}>{error}</Text>
                   <TouchableOpacity onPress={handleSubmit}
                   disabled={valid}
                   className={`flex items-center justify-center h-12 w-full rounded-lg bg-[#0077B6] ${valid && 'opacity-30'}`}>
-                      <Text className={`text-base font-[bold] text-white`}>Create your account</Text>
+                      {loading
+                      ?<ActivityIndicator size="large" color="#ffffff" />
+                      :<Text className={`text-base font-[bold] text-white`}>Create your account</Text>
+                      }
                   </TouchableOpacity>
 
                   <TouchableOpacity onPress={()=>navigation.goBack()}
