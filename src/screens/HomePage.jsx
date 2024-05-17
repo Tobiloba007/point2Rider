@@ -164,7 +164,7 @@ export default function HomePage({setDeleteCard, deleted}) {
                    </View>
 
                    <View className='ml-4 -mt-1'>
-                      <Text className={`text-[#344054] text-base font-['bold']`}>To {item.name}</Text>
+                      <Text className={`text-[#344054] text-base font-['bold']`}>To {item.recepient_name}</Text>
                       <Text className={`text-[#475467] text-sm font-['medium']`}>{item.delivery_point_location}</Text>
                    </View>
                </View>

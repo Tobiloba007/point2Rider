@@ -62,7 +62,7 @@ export default function ViewDetails({route}) {
                     </View>
                     <View className="flex-1 items-start justify-start ml-5">
                          <Text className={`text-sm text-[#344054] font-['bold']`}>
-                              Standing Fan  ( Black )
+                              {data.package_category}
                          </Text>
                          <View className='flex flex-row items-center justify-start'>
                              <Text className={`text-sm text-[#1D2939] font-['regular'] pt-[6px]`}>
@@ -193,7 +193,7 @@ export default function ViewDetails({route}) {
                               Delivering to
                          </Text>
                          <Text className={`text-sm text-[#475467] font-['regular']`}>
-                              32, Wulemotu Street, Orile Agege
+                                {data.delivery_point_location}
                          </Text>
                     </View>
                  </View>
