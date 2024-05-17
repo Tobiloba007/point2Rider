@@ -13,11 +13,11 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [fontsLoaded, fontError] = useFonts({
-    'black': require('./fonts/Satoshi-Black.otf'),
-    'bold': require('./fonts/Satoshi-Bold.otf'),
-    'medium': require('./fonts/Satoshi-Medium.otf'),
-    'regular': require('./fonts/Satoshi-Regular.otf'),
-    'light': require('./fonts/Satoshi-Light.otf'),
+    black: require("./fonts/Satoshi-Black.otf"),
+    bold: require("./fonts/Satoshi-Bold.otf"),
+    medium: require("./fonts/Satoshi-Medium.otf"),
+    regular: require("./fonts/Satoshi-Regular.otf"),
+    light: require("./fonts/Satoshi-Light.otf"),
   });
 
   const onLayoutRootView = useCallback(async () => {
@@ -40,4 +40,3 @@ export default function App() {
     </Provider>
   );
 }
-
