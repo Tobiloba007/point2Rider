@@ -1,5 +1,6 @@
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setUser } from '../AuthSlice';
 
 
 
@@ -105,17 +106,18 @@ export const verifyAccount = (values, setLoading, setError, navigation) => async
 
 
 // LOGIN
-export const loginAction = (values, setLoading, setError, navigation) => async () => {
+export const loginAction = (values, setLoading, setError, navigation) => async (dispatch) => {
     setLoading(true)
     setError('')
         try{
           const response = await axios.post(`${BASE_URL}/auth/login`, values);
           if (response.status === 200) {
-            console.log('login successfull');
-            console.log(response.data)
+            // console.log('login successfull');
+            // console.log(response.data.data.user_data)
+            dispatch(setUser(response.data.data.user_data))
             const access_token = response.data.data.access_token
             AsyncStorage.setItem('loginToken', access_token)
-            console.log(access_token)
+            // console.log(access_token)
             navigation.navigate('tab');
           } else if (response.status !== 200) {
             console.log('Registration failed with status code:', response.status);

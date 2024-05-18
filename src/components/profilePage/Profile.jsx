@@ -7,6 +7,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
 
 
 
@@ -14,6 +15,9 @@ export default function Profile({buttons, setPages}) {
   const [image, setImage] = useState(null);
 
   const navigation = useNavigation();
+
+  const user = useSelector((state) => state.auth.user)
+
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -51,8 +55,8 @@ export default function Profile({buttons, setPages}) {
               </View>
 
               <View className='flex items-start justify-start ml-5'>
-                  <Text className={`text-lg text-[#1D2939] font-['bold']`}>Samuel Ajayi</Text>
-                  <Text className={`text-sm text-[#475467] font-['medium'] pt-1`}>samuel007@gmail.com</Text>
+                  <Text className={`text-lg text-[#1D2939] font-['bold']`}>{user.first_name} {user.last_name}</Text>
+                  <Text className={`text-sm text-[#475467] font-['medium'] pt-1`}>{user.email}</Text>
               </View>
          </View>
 
