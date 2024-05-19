@@ -72,7 +72,7 @@ export const getSingleOrder = (setLoadDetails, navigation, item) => async () => 
 
 
   // MARK ORDER AS DELIVERED
-export const orderDelivered = (values, setLoading, setError, navigation) => async () => {
+export const orderDelivered = (values, setLoading, setError, setSubmitted) => async () => {
        const loginToken = await AsyncStorage.getItem('loginToken');
        const headers = {
          'Authorization': `Bearer ${loginToken}`,
@@ -82,8 +82,8 @@ export const orderDelivered = (values, setLoading, setError, navigation) => asyn
           const response = await axios.post(`${BASE_URL}/rider/orders/mark-as-delivered`, values, { headers });
           if (response.status === 200) {
             console.log('Order delivered successfully');
-            console.log(response.data)
-            navigation.navigate('delivered');
+            // console.log(response.data)
+            setSubmitted(true)
           } else if (response.status !== 200) {
             console.log('Registration failed with status code:', response.status);
           } 
@@ -91,7 +91,7 @@ export const orderDelivered = (values, setLoading, setError, navigation) => asyn
             if (error.response) {
               // The server responded with an error (e.g., HTTP status code 4xx or 5xx)
               setError(error.response.data.message)
-              console.log(error.response.data.message)
+              // console.log(error.response.data.message)
               console.error('API Error:', error.response.data.status);
             } else if (error.request) {
               // The request was made but no response was received (e.g., network issue)

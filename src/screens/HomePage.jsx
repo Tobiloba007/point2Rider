@@ -8,43 +8,13 @@ import Bag from '../../assets/icon/bag.svg'
 import Line from '../../assets/icon/line.svg'
 import Location from '../../assets/icon/location.svg'
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getAllOrders, getSingleOrder, pickedOrder } from '../features/actions/General';
 
 
 
 
 export default function HomePage({setDeleteCard, deleted}) {
-//    const orders = [
-//       {
-//          id: 1,
-//          package: '#5654F4DSA545Q',
-//          pickUp: '26, Bamgbose street, lagos island',
-//          name: 'Jemilat',
-//          address: '100, ikosi street, Ebute meta',
-//          phone: '09081688842',
-//          time: '12:07pm',
-//       },
-//       {
-//          id: 2,
-//          package: '#8891SAGD712',
-//          pickUp: '11, Aronja avenue, ketu',
-//          name: 'Lagbaja',
-//          address: 'Block 2, flat 7, Beach house estate, Ajah',
-//          phone: '08145679752',
-//          time: '8:00am',
-//       },
-//       {
-//          id: 3,
-//          package: '#5654F4DSA545Q',
-//          pickUp: 'pickup address goes here',
-//          name: 'Victoria',
-//          address: 'delivery address goes here',
-//          phone: '08090908788',
-//          time: '12:07pm',
-//       },
-//    ]
-
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const [orders, setOrders] = useState([]) 
@@ -68,6 +38,12 @@ export default function HomePage({setDeleteCard, deleted}) {
 
     const dispatch = useDispatch();
 
+    const user = useSelector((state) => state.auth.user)
+
+
+    //  useEffect(() => {
+    //        console.log(user, 'snhbgvfcdxszxdcfvgbhnj');
+    //  }, [])
 
      useEffect(() => {
           dispatch(getAllOrders(setOrders, setLoading, setError, setEmpty))
@@ -95,7 +71,7 @@ export default function HomePage({setDeleteCard, deleted}) {
                 source={rider} alt='rider image' />
                 <View className='flex items-start ml-4'>
                    <Text className={`text-[#475467] text-sm font-['medium']`}>Hello,</Text>
-                   <Text className={`text-[#101828] text-base font-['bold']`}>Samuel</Text>
+                   <Text className={`text-[#101828] text-base font-['bold']`}>{user.last_name}</Text>
                 </View>
            </View>
 

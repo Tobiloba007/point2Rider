@@ -3,15 +3,19 @@ import React, { useState } from 'react'
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 
 
 export default function EditDetails({setPages}) {
+  const user = useSelector((state) => state.auth.user)
+
+
   const [eye, setEye] = useState(false)
-  const [firstName, setFirstName] = useState('JOhn')
-  const [lastName, setLastName] = useState('Doe')
-  const [phone, setPhone] = useState('8080529118')
-  const [email, setEmail] = useState('Doe@gmail.com')
+  const [firstName, setFirstName] = useState(user.first_name)
+  const [lastName, setLastName] = useState(user.last_name)
+  const [phone, setPhone] = useState(user.phone)
+  const [email, setEmail] = useState(user.email)
 
 
     const navigation = useNavigation();

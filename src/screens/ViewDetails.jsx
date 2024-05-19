@@ -18,10 +18,6 @@ import { orderDelivered } from '../features/actions/General'
 export default function ViewDetails({route}) {
     const { data } = route.params;
 
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
-
-
     const [copiedText, setCopiedText] = useState(data.tracking_id);
 
     const copyToClipboard = async () => {
@@ -35,7 +31,7 @@ export default function ViewDetails({route}) {
 
     const handleDeliveredOrder = () => {
         const trackingId = {'tracking_id': data.tracking_id}
-        dispatch(orderDelivered(trackingId, setLoading, setError, navigation))
+        navigation.navigate('delivered', { trackingId });
     }
 
   return (
@@ -205,10 +201,7 @@ export default function ViewDetails({route}) {
            <View className="flex flex-row items-center justify-between w-full mt-12">
                <TouchableOpacity onPress={handleDeliveredOrder}
                className="flex items-center justify-center h-11 w-[48.5%] rounded-lg bg-[#0077B6]">
-                   {loading
-                    ?<ActivityIndicator size="large" color="#ffffff"  />
-                    :<Text className={`text-base font-[bold] text-white`}>Arrived</Text>
-                   }
+                    <Text className={`text-base font-[bold] text-white`}>Arrived</Text>
                </TouchableOpacity>
 
                <TouchableOpacity onPress={()=>navigation.navigate('trackPackage')}
