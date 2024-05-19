@@ -112,13 +112,15 @@ export const loginAction = (values, setLoading, setError, navigation) => async (
         try{
           const response = await axios.post(`${BASE_URL}/auth/login`, values);
           if (response.status === 200) {
-            // console.log('login successfull');
             // console.log(response.data.data.user_data)
             dispatch(setUser(response.data.data.user_data))
             const access_token = response.data.data.access_token
             AsyncStorage.setItem('loginToken', access_token)
             // console.log(access_token)
-            navigation.navigate('tab');
+            {
+              response.data.data.user_data.type === 'RIDER' ?
+              navigation.navigate('tab') : setError('User not found')
+            }
           } else if (response.status !== 200) {
             console.log('Registration failed with status code:', response.status);
           } 

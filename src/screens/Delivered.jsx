@@ -1,21 +1,33 @@
-import { View, Text, SafeAreaView, TouchableOpacity, TextInput, ScrollView, Dimensions } from 'react-native'
+import { View, Text, SafeAreaView, TouchableOpacity, TextInput, ScrollView, Dimensions, ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import Success from '../../assets/icon/success.svg'
+import { useDispatch } from 'react-redux';
+import { orderDelivered } from '../features/actions/General';
 
 
 
-const Delivered = () => {
+const Delivered = ({route}) => {
+    const { trackingId } = route.params;
+
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(false);
+
     const [code, setCode] = useState('')
-    const [submitted, setSubmitted] = useState(true)
+    const [submitted, setSubmitted] = useState(false)
 
     const navigation = useNavigation();
+
+    const dispatch = useDispatch();
 
     const screenWidth = Dimensions.get('window').width;
 
     const handleSubmit = () => {
-        setSubmitted(true)
+        // console.log(trackingId);
+        const values = {'tracking_id': trackingId, 'confirmation_code': code  }
+        dispatch(orderDelivered(values, setLoading, setError, setSubmitted ))
+        // setSubmitted(true)
     }
 
   return (
@@ -42,7 +54,7 @@ const Delivered = () => {
               <Success />
               <Text className={`text-2xl text-[#1D2939] font-['bold'] mt-6`}>Package Delivered</Text>
 
-               <View className='flex flex-col items-center w-full'>
+               <View className='flex flex-col w-full'>
                   <Text className={`text-base text-center text-[#475467] font-['medium'] mt-6`}>
                        Enter the unique 4-digit code from {'\n'} the sender to verify recipient
                   </Text>
@@ -59,9 +71,15 @@ const Delivered = () => {
                          className={`flex flex-row items-center justify-center h-[44px] bg-[#003B5B] rounded-lg w-[100px] ml-2 ${!code && 'bg-[#4c6471] opacity-80'}`}
                          disabled={!code}
                          >
-                             <Text className={`text-base text-[#FFFFFF] font-['bold']`}>Verify</Text>
+                               {loading
+                                ?<ActivityIndicator size="large" color="#ffffff"  />
+                                :<Text className={`text-base text-[#FFFFFF] font-['bold']`}>Verify</Text>
+                               }
                          </TouchableOpacity>
                   </View>
+
+                  <Text className={`text-sm text-red-500 font-['medium'] mt-4 w-full text-start`}>{error}</Text>
+
               </View>
 
               
