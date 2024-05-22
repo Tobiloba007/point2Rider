@@ -9,6 +9,8 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Linking,
+  SafeAreaView
 } from "react-native";
 import MapView, {
   Marker,
@@ -20,10 +22,18 @@ import MapView, {
 import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
 import MapViewDirections from "react-native-maps-directions";
+import { AntDesign } from '@expo/vector-icons';
+import Rider from '../../assets/images/rider.jpg'
+import Verified from '../../assets/icon/verified.svg'
+import Phone from '../../assets/icon/phone2.svg'
+import Box from '../../assets/icon/box3.svg'
+
+
 
 
 const TrackPackage = () => {
-  const apiKey = process.env.EXPO_PUBLIC_GOOGLE_PLACES_API_KEY;
+  // const apiKey = process.env.EXPO_PUBLIC_GOOGLE_PLACES_API_KEY;
+  const apiKey = 'AIzaSyCwBek1VbADBzfIdYFW0R6UQmCoogeqyoc';
   const [currentLocation, setCurrentLocation] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
@@ -137,6 +147,12 @@ const TrackPackage = () => {
     );
   console.log("current::", currentLocation);
 
+
+  const handleCallPress = () => {
+    const phoneUrl = `tel:${'09023456789'}`;
+    Linking.openURL(phoneUrl);
+  };
+
   return (
     <View style={styles.container}>
       {currentLocation && (
@@ -175,9 +191,14 @@ const TrackPackage = () => {
               }}
               description="Current Location"
             >
-              <Text>Current Location</Text>
+                <Image
+                source={require("../../assets/images/riderImg.png")}
+                style={{ width: 40, height: 40, margin: "auto", marginBottom: 5 }}
+              />
+              {/*<Text className={`text-[#0077B6] text-sm font-['bold']`}>Current Location</Text>*/}
             </MarkerAnimated>
           )}
+
           {pickupCoordinate && (
             <MarkerAnimated
               coordinate={{
@@ -187,12 +208,13 @@ const TrackPackage = () => {
               description="pick up Location"
             >
               <Image
-                source={require("../../assets/images/marker.png")}
-                style={{ width: 30, height: 50, margin: "auto" }}
+                source={require("../../assets/images/Location-png.png")}
+                style={{ width: 40, height: 40, margin: "auto" }}
               />
-              <Text>pick up Location</Text>
+              <Text className={`text-[#0077B6] text-sm font-['bold']`}>pick up Location</Text>
             </MarkerAnimated>
           )}
+
           {destinationCoordinate && (
             <MarkerAnimated
               coordinate={{
@@ -202,12 +224,13 @@ const TrackPackage = () => {
               description="destination Location"
             >
               <Image
-                source={require("../../assets/images/marker.png")}
-                style={{ width: 30, height: 50, margin: "auto" }}
+                source={require("../../assets/images/Location-png.png")}
+                style={{ width: 40, height: 40, margin: "auto" }}
               />
-              <Text>destination Location</Text>
+              <Text className={`text-[#0077B6] text-sm font-['bold']`}>Deivery Location</Text>
             </MarkerAnimated>
           )}
+
           {showDirections && currentLocation && pickupCoordinate && (
             <MapViewDirections
               origin={currentLocation}
@@ -231,7 +254,8 @@ const TrackPackage = () => {
           )}
         </MapView>
       )}
-      <View style={{ position: "absolute", top: 10, right: 10 }}>
+
+      <View style={{ position: "absolute", top: 0, right: 10 }}>
         {pickUpDistance && pickUpDuration ? (
           <TouchableOpacity style={{ paddingTop: 60 }} onPress={traceRoute}>
             <Text>First pickup </Text>
@@ -251,14 +275,64 @@ const TrackPackage = () => {
           </TouchableOpacity>
         ) : null}
       </View>
-      <View style={{ position: "absolute", top: 40, left: 10 }}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text>back</Text>
-        </TouchableOpacity>
+      <View className='absolute top-0 flex items-start justify-start h-full w-full px-5 mt-10'>
+              <TouchableOpacity onPress={()=>navigation.goBack()}
+              className='flex items-center justify-center w-12 h-12 rounded-full bg-[#0077B6]'>
+                   <AntDesign name="arrowleft" size={20} color="white" />
+              </TouchableOpacity>
       </View>
+
+
+      {/* BOTTOM */}
+      <View className='absolute bottom-0 flex items-center justify-start w-full h-72 rounded-t-3xl border-[#D0D5DD] bg-white shadow-2xl shadow-slate-950'>
+      {/* TOP LINE */}
+    <View className='border-2 w-12 rounded-lg border-[#98A2B3] mt-3'></View>
+
+    {/* RIDER DETAILS */}
+    <View className='flex flex-row items-start justify-center w-full mt-8 px-5'>
+        <View className='relative'>
+           <View className='flex items-center justify-center w-[42px] h-[42px] rounded-full bg-[#EBF8FF]'>
+           <Box />
+           </View>
+        </View>
+
+        <View className='flex flex-1 items-start ml-5'>
+              <View className='flex flex-row items-center justify-start'>
+                   <Text className={`text-sm text-[#344054] font-['bold']`}>Standing Fan  ( Black )</Text>
+              </View>
+              <Text className={`text-sm text-[#344054] font-['regular'] mt-1`}>Tracking ID: 5654F4DSA545Q</Text>
+        </View>
+    </View>
+
+    {/* LINES */}
+    <View className='w-full border-[1px] border-[#E4E7EC] mt-4'></View>
+
+    <View className='flex flex-row items-center justify-start w-full px-5 mt-3 mb-2'>
+         <View className='flex items-start'>
+             <Text className={`text-sm text-[#344054] font-['medium'] mt-1`}>Expected Delivery Time</Text> 
+             <Text className={`text-base text-[#344054] font-['bold'] mt-1`}>1hr 3ms</Text> 
+         </View>
+
+         <View className='flex items-start ml-7'>
+             <Text className={`text-sm text-[#344054] font-['medium'] mt-1`}>Amount Paid (N)</Text> 
+             <Text className={`text-base text-[#344054] font-['bold'] mt-1`}>5,000.00</Text> 
+         </View>
+    </View>
+
+      {/* BUTTONS */}
+    <View className='flex flex-row items-center justify-between w-full px-5 mt-5'>
+          <TouchableOpacity onPress={handleCallPress}
+          className='flex flex-row items-center justify-center h-[44px] bg-[#27AE60] rounded-lg w-[47.5%] px-2'>
+              <Phone />
+              <Text className={`text-sm text-[#FFFFFF] font-['bold'] ml-3`}>Call Recipient</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={()=>navigation.navigate('chatBox')} 
+          className='flex flex-row items-center justify-center h-[44px] bg-[#EBF8FF] rounded-lg w-[47.5%] px-2'>
+              <Text className={`text-sm text-[#0077B6] font-['bold'] ml-3`}>Arrived</Text>
+          </TouchableOpacity>
+    </View>
+</View>
     </View>
   );
 };

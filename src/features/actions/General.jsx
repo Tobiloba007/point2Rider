@@ -50,7 +50,7 @@ export const getSingleOrder = (setLoadDetails, navigation, item) => async () => 
     try{
       const response = await axios.get(`${BASE_URL}/rider/getorders?id=${item}`, { headers });
       if (response.status === 200) {
-        console.log(response.data.data, 'datas')
+        // console.log(response.data.data, 'datas')
         const data = response.data.data
         navigation.navigate('viewDetails', { data })
       } else if (response.status !== 200) {

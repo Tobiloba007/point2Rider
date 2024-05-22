@@ -4,7 +4,7 @@ import React from 'react'
 export default function () {
   return (
     <View>
-      <Text>his is a test</Text>
+      <Text>This is a test</Text>
     </View>
   )
 }

@@ -41,10 +41,6 @@ export default function HomePage({setDeleteCard, deleted}) {
     const user = useSelector((state) => state.auth.user)
 
 
-    //  useEffect(() => {
-    //        console.log(user, 'snhbgvfcdxszxdcfvgbhnj');
-    //  }, [])
-
      useEffect(() => {
           dispatch(getAllOrders(setOrders, setLoading, setError, setEmpty))
      }, [dispatch])
@@ -154,7 +150,7 @@ export default function HomePage({setDeleteCard, deleted}) {
 
                    <View className='flex items-start ml-12'>
                        <Text className={`text-[#344054] text-sm font-['medium']`}>Delivery time</Text>
-                       <Text className={`text-[#1D2939] text-xl font-['bold'] mt-1`}>{item.time}</Text>
+                       <Text className={`text-[#1D2939] text-xl font-['bold'] mt-1`}>{item.status}</Text>
                    </View>
                </View>
 
@@ -167,22 +163,16 @@ export default function HomePage({setDeleteCard, deleted}) {
                 </View>
 
                :<View className='w-full'>
-               {acceptOrder === item.id
+               {acceptOrder !== null
                ?<View className='flex flex-row items-center justify-between w-full mt-8'>
 
-                   {!pick
-                   ?<TouchableOpacity onPress={()=>handlePickUp(item.tracking_id)}
+                   <TouchableOpacity onPress={()=>handlePickUp(item.tracking_id)}
                    className='flex items-center justify-center w-[48%] h-11 bg-[#0077B6] rounded-lg'>
                        {loadPickIp
                         ?<ActivityIndicator size="large" color="#ffffff"  />
                         :<Text className={`text-white text-base font-['bold']`}>Picked Up</Text>
                        }
                    </TouchableOpacity>
-                  :<TouchableOpacity onPress={()=>handlePickUp(item.tracking_id)}
-                   className='flex items-center justify-center w-[48%] h-11 bg-[#F4F4F4] rounded-lg'>
-                        <Text className={`text-green-500 text-base font-['bold']`}>Picked</Text>
-                   </TouchableOpacity>
-                    }
 
                    <TouchableOpacity onPress={()=>handleSingleOrder(item.id)}
                    className='flex items-center justify-center w-[48%] h-11 bg-[#D9F2FF] rounded-lg'>
@@ -194,7 +184,42 @@ export default function HomePage({setDeleteCard, deleted}) {
 
                </View>
 
-               :<View className='flex flex-row items-center justify-between w-full mt-8'>
+               :item.status === 'COMPLETED'
+               ?<View className='flex flex-row items-center justify-between w-full mt-8'>
+                   <TouchableOpacity onPress={()=>handlePickUp(item.tracking_id)}
+                   className='flex items-center justify-center w-[48%] h-11 bg-green-500 rounded-lg'>
+                        <Text className={`text-white text-base font-['bold']`}>Completed</Text>
+                   </TouchableOpacity>
+
+                   <TouchableOpacity onPress={()=>handleSingleOrder(item.id)}
+                   className='flex items-center justify-center w-[48%] h-11 bg-[#D9F2FF] rounded-lg'>
+                       {loadDetails
+                        ?<ActivityIndicator size="large" color="#0077B6"  />
+                        :<Text className={`text-[#0077B6] text-base font-['bold']`}>View Details</Text>
+                       }
+                   </TouchableOpacity>
+
+               </View>
+
+               :item.status === 'INTRANSIT'
+               ?<View className='flex flex-row items-center justify-between w-full mt-8'>
+                   <TouchableOpacity
+                   className='flex items-center justify-center w-[48%] h-11 bg-[#F4F4F4] rounded-lg'>
+                        <Text className={`text-green-500 text-base font-['bold']`}>Picked</Text>
+                   </TouchableOpacity>
+
+                   <TouchableOpacity onPress={()=>handleSingleOrder(item.id)}
+                   className='flex items-center justify-center w-[48%] h-11 bg-[#D9F2FF] rounded-lg'>
+                       {loadDetails
+                        ?<ActivityIndicator size="large" color="#0077B6"  />
+                        :<Text className={`text-[#0077B6] text-base font-['bold']`}>View Details</Text>
+                       }
+                   </TouchableOpacity>
+
+               </View>
+
+               :item.status === 'PENDING' &&
+               <View className='flex flex-row items-center justify-between w-full mt-8'>
                    <TouchableOpacity onPress={()=>handleAccept(item.id)}
                    className='flex items-center justify-center w-[48%] h-11 bg-[#0077B6] rounded-lg'>
                        <Text className={`text-white text-base font-['bold']`}>Accept Order</Text>
