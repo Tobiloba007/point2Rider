@@ -1,58 +1,37 @@
-import { View, Text, ScrollView, Pressable, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, ScrollView, Pressable, TouchableOpacity, ActivityIndicator } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { MaterialIcons } from '@expo/vector-icons';
 import Box from '../../../assets/icon/box.svg'
+import { getAllOrders } from '../../features/actions/General';
+import Empty from '../homePage/Empty';
+import { useDispatch } from 'react-redux';
+
 
 
 export const DeliveriesHistory = () => {
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState('')
+    const [orders, setOrders] = useState([]) 
+    const [empty, setEmpty] = useState(false);
     const [dropdown, setDropdown] = useState(false)
     const [select, setSelect] = useState('This month')
 
-    const items = ['This Month', 'Last 3  Month', 'This Year', 'Last Year']
+    const [totalOrders, setTotalOrders] = useState(0)
 
-    const history = [
-        {
-            id: 1,
-            title: 'Standing Fan ( Black )',
-            trackingId: '5654F4DSA545Q',
-            status: 'In Transit'
-        },
-        {
-            id: 2,
-            title: 'Indomie 5 packs',
-            trackingId: '5654F4DSA576g',
-            status: 'In Transit'
-        },
-        {
-            id: 3,
-            title: '2 King sized mattressed',
-            trackingId: '8894F4DSA545Q',
-            status: 'Delivered'
-        },
-        {
-            id: 4,
-            title: 'Macbook Air 2023',
-            trackingId: '122F4DSA54H9',
-            status: 'Delivered'
-        },
-        {
-            id: 5,
-            title: 'LG Medium sized refrigerator',
-            trackingId: '6676F4DSA549L',
-            status: 'Delivered'
-        },
-        {
-            id: 6,
-            title: 'Standing Fan ( Black )',
-            trackingId: '5654F4DSA545Q',
-            status: 'Delivered'
-        },
-    ]
+    const items = ['This Month', 'Last 3  Month', 'This Year', 'Last Year']
 
     const handleSelect = (item) => {
         setSelect(item)
         setDropdown(false)
     }
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getAllOrders(setOrders, setLoading, setError, setEmpty))
+        setTotalOrders(orders.length + 0)
+   }, [dispatch])
+
 
   return (
     <ScrollView 
@@ -82,8 +61,22 @@ export const DeliveriesHistory = () => {
              }
           </View>
 
+
+          {loading &&
+            <View className='flex h-full w-screen items-center justify-center'>
+                  <ActivityIndicator size="large" color="#0077B6" />
+            </View>
+           }
+    
+              {/* EMPTY ORDERS */}
+              {empty &&
+               <View className="flex items-center justify-center w-full">
+                      <Empty />
+               </View>
+               }
+
           <View className='flex items-center justify-start w-full px-5 pt-8'>
-               {history.map((item) => {
+               {orders.map((item) => {
                 return(
                <View key={item.id} className='flex items-center w-full mt-3'>
                   <View className='flex flex-row items-center justify-between w-full'>
@@ -92,14 +85,17 @@ export const DeliveriesHistory = () => {
                               <Box width={19.2} />
                           </View>
                           <View className='flex items-start ml-3'>
-                              <Text className={`text-[#344054] text-sm font-['bold'] text-start`}>{item.title}</Text>
-                              <Text className={`text-[#1D2939] text-sm font-['regular'] text-start mt-2 w-[200px]`}>Tracking ID: {item.trackingId}</Text>
+                              <Text className={`text-[#344054] text-sm font-['bold'] text-start`}>{item.package_name}</Text>
+                              <Text className={`text-[#1D2939] text-sm font-['regular'] text-start mt-2 w-[200px]`}>Tracking ID: {item.tracking_id}</Text>
                           </View>
                       </View>
 
                       <View className='flex'>
-                           <Text className={`text-sm font-['bold'] text-start ${item.status === 'Delivered' ? 'text-[#27AE60]' 
-                                             : item.status === 'In Transit' && 'text-[#F2C94C]'}`}>{item.status}</Text>
+                           <Text className={`text-sm font-['bold'] text-start ${item.status === 'DELIVERED' ? 'text-[#27AE60]' : item.status === 'INTRANSIT' ? 'text-[#F2C94C]' : item.status === 'CANCELLED' && 'text-[#f2654c]'}`}>
+                                              {item.status === 'INTRANSIT' ? 'In-transit' 
+                                              : item.status === 'DELIVERED' ? 'Completed' 
+                                              : item.status === 'CANCELLED' && 'Cancelled'}
+                                             </Text>
                       </View>
                   </View>
 

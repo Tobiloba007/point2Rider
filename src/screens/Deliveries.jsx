@@ -1,9 +1,30 @@
 import { Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Bag from '../../assets/icon/bag.svg'
 import { DeliveriesHistory } from '../components/deliveries/DeliveriesHistory'
+import { getAllOrders } from '../features/actions/General'
+import { useDispatch } from 'react-redux'
+
+
 
 export default function Deliveries() {
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState('')
+    const [orders, setOrders] = useState([]) 
+    const [empty, setEmpty] = useState(false);
+
+    const [totalOrders, setTotalOrders] = useState(null)
+
+
+
+     const dispatch = useDispatch();
+
+
+     useEffect(() => {
+          dispatch(getAllOrders(setOrders, setLoading, setError, setEmpty))
+          setTotalOrders(orders.length + 1)
+     }, [dispatch])
+
   return (
     <View className='flex flex-1 items-start justify-start pt-8'>
         <Text className={`text-[#1D2939] text-2xl font-['medium'] w-full text-start px-5`}>Deliveries</Text>
@@ -14,7 +35,7 @@ export default function Deliveries() {
                        <Bag />
                        <Text className={`text-[#667085] text-xs font-['medium'] ml-2`}>TOTAL ORDER RECIEVED</Text>
                   </View>
-                  <Text className={`text-[#1D2939] text-[36px] font-['bold']`}>30</Text>
+                  <Text className={`text-[#1D2939] text-[36px] font-['bold']`}>{totalOrders}</Text>
              </View>
 
              <View className='flex flex-row items-center justify-between w-full mt-3'>

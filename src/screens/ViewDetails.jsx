@@ -58,7 +58,7 @@ export default function ViewDetails({route}) {
                     </View>
                     <View className="flex-1 items-start justify-start ml-5">
                          <Text className={`text-sm text-[#344054] font-['bold']`}>
-                              {data.package_category}
+                              {data.package_name}
                          </Text>
                          <View className='flex flex-row items-center justify-start'>
                              <Text className={`text-sm text-[#1D2939] font-['regular'] pt-[6px]`}>
@@ -126,7 +126,7 @@ export default function ViewDetails({route}) {
 
                 <View className='flex flex-row items-start justify-start w-full mt-8 pb-2 pl-5'>
                     <Text className={`text-sm text-[#344054] font-['bold']`}>
-                        Status: {data.status}
+                        Status: {data.status === 'INTRANSIT' ? 'In-transit' : data.status === 'DELIVERED' && 'Delivered'}
                     </Text>
                     <View className="ml-1">
                        <Ionicons name="checkmark-circle-outline" size={20} color="#27AE60" />
@@ -135,8 +135,8 @@ export default function ViewDetails({route}) {
 
            </View>
 
-
            {/* PRODUCT STATUSES */}
+           {data.status === 'INTRANSIT' &&
            <View className='flex items-start justify-start w-full mt-6'>
                   {/* PICKED UP */}
                  <View className='flex flex-row items-start justify-start w-full'>
@@ -158,6 +158,7 @@ export default function ViewDetails({route}) {
                  </View>
 
                   {/* IN TRANSIT */}
+                  {data.status === 'INTRANSIT' &&
                  <View className='flex flex-row items-start justify-start w-full -mt-3'>
                     <View className='flex items-center justify-start'>
                           <Octicons name="dot-fill" size={18} color="#0077B6" />
@@ -176,6 +177,7 @@ export default function ViewDetails({route}) {
                          </Text>
                     </View>
                  </View>
+                  }
 
 
                   {/* DELIVERED */}
@@ -186,7 +188,7 @@ export default function ViewDetails({route}) {
 
                     <View className='flex items-start ml-4 -mt-1'>
                          <Text className={`text-base text-[#344054] font-['bold']`}>
-                              Delivering to
+                             {data.status === 'INTRANSIT' ? 'Delivering to' : data.status === 'COMPLETED' && 'Delivered to' }
                          </Text>
                          <Text className={`text-sm text-[#475467] font-['regular']`}>
                                 {data.delivery_point_location}
@@ -195,20 +197,31 @@ export default function ViewDetails({route}) {
                  </View>
 
            </View>
+           }
 
 
            {/* BUTTON */}
+           {data.status === 'INTRANSIT' &&
            <View className="flex flex-row items-center justify-between w-full mt-12">
-               <TouchableOpacity onPress={handleDeliveredOrder}
-               className="flex items-center justify-center h-11 w-[48.5%] rounded-lg bg-[#0077B6]">
-                    <Text className={`text-base font-[bold] text-white`}>Arrived</Text>
-               </TouchableOpacity>
+                <TouchableOpacity onPress={handleDeliveredOrder}
+                className="flex items-center justify-center h-11 w-[48.5%] rounded-lg bg-[#0077B6]">
+                     <Text className={`text-base font-[bold] text-white`}>Arrived</Text>
+                </TouchableOpacity>
 
                <TouchableOpacity onPress={()=>navigation.navigate('trackPackage')}
                className="flex items-center justify-center h-11 w-[48.5%] rounded-lg bg-[#D9F2FF]">
                    <Text className={`text-base font-[bold] text-[#0077B6]`}>View Map</Text>
+                </TouchableOpacity>  
+           </View>
+           }
+
+           {data.status === 'COMPLETED' &&
+           <View className="flex flex-row items-center justify-between w-full mt-12">
+               <TouchableOpacity className="flex items-center justify-center h-11 w-full rounded-lg bg-green-600">
+                    <Text className={`text-base font-[bold] text-white`}>Order Completed</Text>
                </TouchableOpacity>
            </View>
+            }
 
            </ScrollView>
 
