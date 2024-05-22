@@ -77,7 +77,6 @@ const LayoutRoot = forwardRef((props, ref) => {
 });
 
 const Layout = Object.assign(LayoutRoot, {
-  Header: LayoutHeader,
   Body: LayoutBody,
   ScrollView: LayoutScrollView,
   FlatList: LayoutFlatList,
