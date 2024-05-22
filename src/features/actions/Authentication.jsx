@@ -1,11 +1,7 @@
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setUser } from '../AuthSlice';
-
-
-
-const BASE_URL = 'https://api.test-point2api.online/api'
-
+import { BASE_URL } from '../../../constants/base_urls';
 
 // REGISTER ACCOUNT
 export const registerAccount = (formData, setError, setLoading, navigation) => async () => {
