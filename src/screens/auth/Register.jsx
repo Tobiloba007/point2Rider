@@ -75,13 +75,14 @@ export default function Register() {
   const navigation = useNavigation();
 
   const screenWidth = Dimensions.get("window").width;
+  let formatted = date.toISOString().split("T")[0]
 
-  const dob = { dob: date === null ? "" : date.toLocaleDateString() };
+  const dob = { dob: date === null ? "" : formatted };
 
   const handleSubmit = async (values) => {
-    navigation.navigate("register2", { values });
     const combinedData = { ...values, ...dob };
-    console.log("hello", combinedData);
+    navigation.navigate("register2", { values: combinedData });
+    // console.log("hello", combinedData);
   };
 
   return (
