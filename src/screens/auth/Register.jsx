@@ -75,7 +75,7 @@ export default function Register() {
   const navigation = useNavigation();
 
   const screenWidth = Dimensions.get("window").width;
-  let formatted = date.toISOString().split("T")[0]
+  let formatted = date?.toISOString()?.split("T")[0]
 
   const dob = { dob: date === null ? "" : formatted };
 
