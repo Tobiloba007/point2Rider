@@ -22,6 +22,8 @@ import {
   getSingleOrder,
   pickedOrder,
 } from "../features/actions/General";
+import User from '../../assets/icon/user.svg'
+
 
 export default function HomePage({ setDeleteCard, deleted }) {
   const [loading, setLoading] = useState(false);
@@ -76,11 +78,18 @@ export default function HomePage({ setDeleteCard, deleted }) {
       {/* HEADER */}
       <View className="flex flex-row items-center justify-between w-full pt-8">
         <View className="flex flex-row items-center justify-start">
+          {user.profile_picture === null &&
+            <View className='flex items-center justify-center h-16 w-16 rounded-full bg-[#F9FAFB]'>
+                <User className='w-20 h-20' />
+            </View>
+          }
+          {user.profile_picture !== null &&
           <Image
             className="h-[60px] w-[60px] rounded-full"
             source={{ uri: user.profile_picture }}
             alt="rider image"
           />
+          }
           <View className="flex items-start ml-4">
             <Text className={`text-[#475467] text-sm font-['medium']`}>
               Hello,

@@ -55,28 +55,6 @@ export default function Profile({buttons, setPages}) {
   };
 
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const jsonValue = await AsyncStorage.getItem('loginDetails');
-  //       if (jsonValue != null) {
-  //         setStoredValue(JSON.parse(jsonValue));
-  //       } else {
-  //         setStoredValue('No value found');
-  //       }
-  //     } catch (e) {
-  //       console.error('Failed to fetch the data from storage', e);
-  //     }
-  //   };
-
-  //   getData();
-  // }, []);
-
-  // useEffect(()=>{
-  //   console.log(storedValue);
-  // },[])
-
-
 
   return (
     <View className="flex-1 items-start justify-start w-full bg-white px-5">
@@ -85,7 +63,7 @@ export default function Profile({buttons, setPages}) {
     <ScrollView>
          <View className='flex flex-row items-center justify-start w-full mt-7'>
               <View className='relative'>
-                 {image && user.profile_picture === null && 
+                 {user.profile_picture === null && image === null && 
                     <View className='flex items-center justify-center h-16 w-16 rounded-full bg-[#F9FAFB]'>
                         <User className='w-20 h-20' />
                     </View>
