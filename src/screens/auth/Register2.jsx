@@ -32,10 +32,10 @@ import BottomSheet from "../../components/Bottomsheet/Bottomsheet";
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 
 export default function Register2({ route }) {
-  // const { values } = route.params;
-  const values = { email: "example@gmail.com" };
+  const { values } = route.params;
+  // console.log(values);
+  // const values = { email: "example@gmail.com" };
   const insets = useSafeAreaInsets();
-
   const [idPhoto, setIdPhoto] = useState(null);
   const [passport, setPassport] = useState(null);
   const [bikePhoto, setBikePhoto] = useState(null);
@@ -264,10 +264,19 @@ export default function Register2({ route }) {
   const combinedValues = { ...values, ...values2 };
 
   const handleSubmit = () => {
-    navigation.navigate("verifyAccount");
+    // navigation.navigate("verifyAccount");
     const formData = new FormData();
     Object.keys(combinedValues).forEach((key) => {
-      formData.append(key, combinedValues[key]);
+      // console.log(key);
+      if(key === "passport" || key === "bike_photo" || key === "bike_license" || key === "road_worthiness" || key === "riders_card" || key === "id_card") {
+        formData.append(key, {
+          uri: combinedValues[key],
+          type: "image/jpg",
+          name: key,
+        } );
+      } else {
+        formData.append(key, combinedValues[key]);
+      }
     });
     dispatch(registerAccount(formData, setError, setLoading, navigation));
     // console.log(combinedValues, 'two')

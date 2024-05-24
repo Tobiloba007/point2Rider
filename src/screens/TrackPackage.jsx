@@ -27,11 +27,15 @@ import Rider from '../../assets/images/rider.jpg'
 import Verified from '../../assets/icon/verified.svg'
 import Phone from '../../assets/icon/phone2.svg'
 import Box from '../../assets/icon/box3.svg'
+import LocationIcon from '../../assets/icon/Location1.svg'
+import RiderIcon from '../../assets/icon/riderIcon.svg'
 
 
 
 
-const TrackPackage = () => {
+const TrackPackage = ({route}) => {
+  const { data } = route.params;
+
   // const apiKey = process.env.EXPO_PUBLIC_GOOGLE_PLACES_API_KEY;
   const apiKey = 'AIzaSyCwBek1VbADBzfIdYFW0R6UQmCoogeqyoc';
   const [currentLocation, setCurrentLocation] = useState(null);
@@ -153,6 +157,12 @@ const TrackPackage = () => {
     Linking.openURL(phoneUrl);
   };
 
+
+  const handleDeliveredOrder = () => {
+    const trackingId = {'tracking_id': data.tracking_id}
+    navigation.navigate('delivered', { trackingId });
+   }
+
   return (
     <View style={styles.container}>
       {currentLocation && (
@@ -182,6 +192,8 @@ const TrackPackage = () => {
           pitchEnabled={true}
           showsIndoorLevelPicker={true}
         >
+
+        {/* CURRENT LOCATION */}
           {currentLocation && (
             <MarkerAnimated
               style={{ flexDirection: "column" }}
@@ -191,14 +203,14 @@ const TrackPackage = () => {
               }}
               description="Current Location"
             >
-                <Image
-                source={require("../../assets/images/riderImg.png")}
-                style={{ width: 40, height: 40, margin: "auto", marginBottom: 5 }}
-              />
+            <View className='m-auto mb-1'>
+                <RiderIcon width={40} height={40} />
+            </View>
               {/*<Text className={`text-[#0077B6] text-sm font-['bold']`}>Current Location</Text>*/}
             </MarkerAnimated>
           )}
 
+               {/* PICK UP LOCATION */}
           {pickupCoordinate && (
             <MarkerAnimated
               coordinate={{
@@ -207,14 +219,15 @@ const TrackPackage = () => {
               }}
               description="pick up Location"
             >
-              <Image
-                source={require("../../assets/images/Location-png.png")}
-                style={{ width: 40, height: 40, margin: "auto" }}
-              />
+              <View className='m-auto'>
+                  <LocationIcon width={40} height={40} />
+              </View>
               <Text className={`text-[#0077B6] text-sm font-['bold']`}>pick up Location</Text>
             </MarkerAnimated>
           )}
 
+
+              {/* DELIVERY LOCATION */}
           {destinationCoordinate && (
             <MarkerAnimated
               coordinate={{
@@ -223,10 +236,9 @@ const TrackPackage = () => {
               }}
               description="destination Location"
             >
-              <Image
-                source={require("../../assets/images/Location-png.png")}
-                style={{ width: 40, height: 40, margin: "auto" }}
-              />
+              <View className='m-auto'>
+                 <LocationIcon width={40} height={40} />
+              </View>
               <Text className={`text-[#0077B6] text-sm font-['bold']`}>Deivery Location</Text>
             </MarkerAnimated>
           )}
@@ -237,7 +249,7 @@ const TrackPackage = () => {
               destination={pickupCoordinate}
               apikey={apiKey}
               strokeColor="#6644ff"
-              strokeWidth={4}
+              strokeWidth={5}
               onReady={traceRouteOnReady}
             />
           )}
@@ -255,7 +267,7 @@ const TrackPackage = () => {
         </MapView>
       )}
 
-      <View style={{ position: "absolute", top: 0, right: 10 }}>
+      <View style={{ position: "absolute", top: 10, right: 10 }}>
         {pickUpDistance && pickUpDuration ? (
           <TouchableOpacity style={{ paddingTop: 60 }} onPress={traceRoute}>
             <Text>First pickup </Text>
@@ -281,6 +293,8 @@ const TrackPackage = () => {
                    <AntDesign name="arrowleft" size={20} color="white" />
               </TouchableOpacity>
       </View>
+
+
 
 
       {/* BOTTOM */}
@@ -327,7 +341,7 @@ const TrackPackage = () => {
               <Text className={`text-sm text-[#FFFFFF] font-['bold'] ml-3`}>Call Recipient</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={()=>navigation.navigate('chatBox')} 
+          <TouchableOpacity onPress={handleDeliveredOrder} 
           className='flex flex-row items-center justify-center h-[44px] bg-[#EBF8FF] rounded-lg w-[47.5%] px-2'>
               <Text className={`text-sm text-[#0077B6] font-['bold'] ml-3`}>Arrived</Text>
           </TouchableOpacity>

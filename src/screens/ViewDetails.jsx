@@ -208,7 +208,7 @@ export default function ViewDetails({route}) {
                      <Text className={`text-base font-[bold] text-white`}>Arrived</Text>
                 </TouchableOpacity>
 
-               <TouchableOpacity onPress={()=>navigation.navigate('trackPackage')}
+               <TouchableOpacity onPress={()=>navigation.navigate('trackPackage', { data })}
                className="flex items-center justify-center h-11 w-[48.5%] rounded-lg bg-[#D9F2FF]">
                    <Text className={`text-base font-[bold] text-[#0077B6]`}>View Map</Text>
                 </TouchableOpacity>  
