@@ -1,13 +1,18 @@
-import { View, Text, SafeAreaView, StatusBar, TextInput, TouchableOpacity, KeyboardAvoidingView, Dimensions, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, SafeAreaView, StatusBar, TextInput, ActivityIndicator, TouchableOpacity, KeyboardAvoidingView, Dimensions, ScrollView } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { editDetails } from '../../features/actions/General';
 
 
 
 export default function EditDetails({setPages}) {
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const user = useSelector((state) => state.auth.user)
 
 
@@ -18,16 +23,26 @@ export default function EditDetails({setPages}) {
   const [email, setEmail] = useState(user.email)
 
 
+
+
     const navigation = useNavigation();
+
+    const dispatch = useDispatch()
+
 
     const screenWidth = Dimensions.get('window').width;
 
     const values = {'first_name': firstName, 'last_name': lastName, 'phone': phone, 'email': email}
 
     const handleSubmit = () => {
-      setPages(0)
+      dispatch(editDetails(values, setError, setSuccess, setLoading))
+      // setPages(0)
       // console.log(values);
     }
+
+
+
+
 
   return (
     <ScrollView contentContainerStyle={{width: screenWidth, paddingBottom: 40}}
@@ -103,12 +118,25 @@ export default function EditDetails({setPages}) {
                   </View>
             </View>
 
+            <View className='w-full mt-20'>
+              {success &&
+               <Text className={`w-full text-start text-sm text-green-600 font-['medium'] pb-2`}>{success}</Text>
+              }
+              {error &&
+               <Text className={`w-full text-start text-sm text-red-600 font-['medium'] pb-2`}>{error}</Text>
+              }
               {/* BUTTON */}
-            <View className="flex items-center justify-center w-full mt-24">
+            <View className="flex items-center justify-center w-full">
                   <TouchableOpacity onPress={handleSubmit} 
                   className="flex items-center justify-center h-12 w-full rounded-lg bg-[#0077B6]">
-                      <Text className={`text-base font-[bold] text-white`}>Save Changes</Text>
+                      {loading ? (
+                        <ActivityIndicator size="large" color="#ffffff" />
+                      ) : (
+                        <Text className={`text-base font-[bold] text-white`}>Save Changes</Text>
+                      )}
                   </TouchableOpacity>
+            </View>
+
             </View>
 
         </KeyboardAvoidingView>

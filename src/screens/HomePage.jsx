@@ -50,6 +50,7 @@ export default function HomePage({ setDeleteCard, deleted }) {
 
   useEffect(() => {
     dispatch(getAllOrders(setOrders, setLoading, setError, setEmpty));
+    console.log(user);
   }, [dispatch]);
 
   const handleSingleOrder = (item) => {
@@ -77,7 +78,7 @@ export default function HomePage({ setDeleteCard, deleted }) {
         <View className="flex flex-row items-center justify-start">
           <Image
             className="h-[60px] w-[60px] rounded-full"
-            source={rider}
+            source={{ uri: user.profile_picture }}
             alt="rider image"
           />
           <View className="flex items-start ml-4">
@@ -122,7 +123,7 @@ export default function HomePage({ setDeleteCard, deleted }) {
       )}
 
       {/* EMPTY ORDERS */}
-      {empty && (
+      {orders.length === 0 && (
         <View className="flex items-center justify-center w-full">
           <Empty />
         </View>

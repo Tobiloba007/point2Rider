@@ -135,6 +135,7 @@ export const verifyAccount =
     setLoading(false);
   };
 
+
 // LOGIN
 export const loginAction =
   (values, setLoading, setError, navigation) => async (dispatch) => {
@@ -147,6 +148,8 @@ export const loginAction =
         dispatch(setUser(response.data.data.user_data));
         const access_token = response.data.data.access_token;
         AsyncStorage.setItem("loginToken", access_token);
+        // const jsonValue = JSON.stringify(response.data.data.user_data);
+        // AsyncStorage.setItem("loginDetails", jsonValue);
         // console.log(access_token)
         {
           response.data.data.user_data.type === "RIDER"
@@ -171,6 +174,7 @@ export const loginAction =
 
     setLoading(false);
   };
+
 
 // FORGOT PASSWORD
 export const forgotPassword =
@@ -204,6 +208,7 @@ export const forgotPassword =
 
     setLoading(false);
   };
+
 
 // FORGOT PASSWORD TOKEN
 export const forgotPasswordToken =
@@ -252,6 +257,7 @@ export const forgotPasswordToken =
     setLoading(false);
   };
 
+
 // RESEND VERIFY TOKEN
 export const resendVerifyToken =
   (resend, setLoadResend, setError, setResendError, setStartCountdown) =>
@@ -288,6 +294,7 @@ export const resendVerifyToken =
 
     setLoadResend(false);
   };
+
 
 // CHANGE PASSWORD
 export const changePassword =
