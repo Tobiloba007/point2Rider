@@ -24,7 +24,7 @@ import Layout from "../../../layouts/layout";
 const LoginSchema = Yup.object().shape({
   phone: Yup.string()
     .required()
-    .matches(/^(080|081|090|070|091)\d{8}$/),
+    .matches(/^(080|081|090|070|091)\d{9}$/),
   password: Yup.string().min(8).required(),
   // .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/),
 });

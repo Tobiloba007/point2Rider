@@ -27,6 +27,7 @@ export default function Tab() {
   const [inputModal, setInputModal] = useState(false)
   const [deleteCard, setDeleteCard] = useState(false)
   const [deleteBank, setDeleteBank] = useState(false)
+  const [deleteId, setDeleteId] = useState(false)
   const [deleted, setDeleted] = useState(false)
   const [reason, setReason] = useState(false)
   const [location, setLocation] = useState('')
@@ -43,7 +44,7 @@ export default function Tab() {
 
         <View className='flex-1'>
            {
-               tab === 'Home' ? <HomePage setDeleteCard={setDeleteCard} deleted={deleted} />
+               tab === 'Home' ? <HomePage setDeleteCard={setDeleteCard} deleted={deleted} setDeleteId={setDeleteId} />
               : tab === 'Deliveries' ? <Deliveries/>
               : tab === 'Notification' ? <Notifications/>
               : tab === 'Profile' ? <ProfilePage setDeleteBank={setDeleteBank} />
@@ -157,6 +158,7 @@ export default function Tab() {
          {reason && 
             <ReasonModal 
             setDeleted={setDeleted}
+            deleteId={deleteId}
             setReason={setReason}
              />}
         

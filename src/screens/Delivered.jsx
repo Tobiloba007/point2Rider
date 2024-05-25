@@ -26,7 +26,7 @@ const Delivered = ({route}) => {
     const handleSubmit = () => {
         // console.log(trackingId);
         const values = {'tracking_id': trackingId, 'confirmation_code': code  }
-        dispatch(orderDelivered(values, setLoading, setError, setSubmitted ))
+        dispatch(orderDelivered(values, setLoading, setError, setSubmitted, navigation ))
         // setSubmitted(true)
     }
 

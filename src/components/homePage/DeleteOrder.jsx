@@ -8,7 +8,7 @@ export default function DeleteOrder({setDeleteCard, setReason, setDeleted}) {
     const handleDelete = () => {
         setReason(true)
         setDeleteCard(false)
-        setDeleted(true)
+     //    setDeleted(true)
        }
 
   return (

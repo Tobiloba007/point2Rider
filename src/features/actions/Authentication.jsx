@@ -163,8 +163,8 @@ export const loginAction =
       if (error.response) {
         // The server responded with an error (e.g., HTTP status code 4xx or 5xx)
         setError(error.response.data.message);
-        console.log(error.response);
-        console.error("API Error:", error.response.data.status);
+        // console.log(error.response);
+        // console.error("API Error:", error.response.data.status);
       } else if (error.request) {
         // The request was made but no response was received (e.g., network issue)
         setError("Please check your internet connection...");

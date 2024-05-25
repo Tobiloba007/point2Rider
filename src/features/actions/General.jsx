@@ -20,7 +20,7 @@ export const getAllOrders = (setOrders, setLoading, setError, setEmpty) => async
       const response = await axios.get(`${BASE_URL}/rider/getorders`, { headers });
       if (response.status === 200) {
         setOrders(response.data.data.data)
-        // console.log(response.data.data.data)
+        console.log(response.data.data.data)
         // if(response.data.data.orders.data.length === 0){
         //   setEmpty(true)
         // }
@@ -73,7 +73,7 @@ export const getSingleOrder = (setLoadDetails, navigation, item) => async () => 
 
 
   // MARK ORDER AS DELIVERED
-export const orderDelivered = (values, setLoading, setError, setSubmitted) => async () => {
+export const orderDelivered = (values, setLoading, setError, setSubmitted, navigation) => async () => {
        const loginToken = await AsyncStorage.getItem('loginToken');
        const headers = {
          'Authorization': `Bearer ${loginToken}`,
@@ -85,6 +85,7 @@ export const orderDelivered = (values, setLoading, setError, setSubmitted) => as
             console.log('Order delivered successfully');
             // console.log(response.data)
             setSubmitted(true)
+            navigation.navigate('tab')
           } else if (response.status !== 200) {
             console.log('Registration failed with status code:', response.status);
           } 
@@ -135,6 +136,40 @@ export const pickedOrder = (values, setLoadPickUp, setPick) => async () => {
           };
         
           setLoadPickUp(false)
+}
+
+
+  // DECLINE ORDER
+  export const declineOrder = (values, setDeleted, setReason, setLoading) => async () => {
+    const loginToken = await AsyncStorage.getItem('loginToken');
+    const headers = {
+      'Authorization': `Bearer ${loginToken}`,
+    };
+    setLoading(true)
+     try{
+       const response = await axios.post(`${BASE_URL}/rider/orders/cancel-order`, values, { headers });
+       if (response.status === 200) {
+         console.log(response.data)
+         console.log(response.data.message)
+         setReason(false)
+         setDeleted(true)
+       } else if (response.status !== 200) {
+         console.log('Registration failed with status code:', response.status);
+       } 
+     } catch(error) {
+         if (error.response) {
+           // The server responded with an error (e.g., HTTP status code 4xx or 5xx)
+          //  setError(error.response.data.message)
+           console.log(error.response.data.message)
+           console.error('API Error:', error.response.data.status);
+         } else if (error.request) {
+           // The request was made but no response was received (e.g., network issue)
+          //  setError('Please check your internet connection...')
+           console.error('Network Error:', error.request);
+         } 
+       };
+     
+       setLoadPickUp(false)
 }
 
 

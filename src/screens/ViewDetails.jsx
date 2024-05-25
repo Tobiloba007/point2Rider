@@ -126,7 +126,7 @@ export default function ViewDetails({route}) {
 
                 <View className='flex flex-row items-start justify-start w-full mt-8 pb-2 pl-5'>
                     <Text className={`text-sm text-[#344054] font-['bold']`}>
-                        Status: {data.status === 'INTRANSIT' ? 'In-transit' : data.status === 'DELIVERED' && 'Delivered'}
+                        Status: {data.status === 'INTRANSIT' ? 'In-transit' : data.status === 'DELIVERED' ? 'Delivered' : data.status === 'ASSIGNEDTORIDER' && 'Pending Pickup'}
                     </Text>
                     <View className="ml-1">
                        <Ionicons name="checkmark-circle-outline" size={20} color="#27AE60" />
@@ -152,7 +152,7 @@ export default function ViewDetails({route}) {
                              Package picked up by you
                          </Text>
                          <Text className={`text-sm text-[#475467] font-['regular']`}>
-                             February 2, 2024. 10:00am
+                             {data.pickup_time}
                          </Text>
                     </View>
                  </View>
@@ -172,7 +172,7 @@ export default function ViewDetails({route}) {
                              In Transit 
                          </Text>
                          <Text className={`text-sm text-[#475467] font-['regular']`}>
-                             Package picked up by rider
+                             Package picked up by you
                              <Text className={`font-['medium']`}> (KJA-884-RM)</Text>
                          </Text>
                     </View>

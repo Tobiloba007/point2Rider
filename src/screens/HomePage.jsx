@@ -25,7 +25,7 @@ import {
 import User from '../../assets/icon/user.svg'
 
 
-export default function HomePage({ setDeleteCard, deleted }) {
+export default function HomePage({ setDeleteCard, deleted, setDeleteId }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [orders, setOrders] = useState([]);
@@ -41,7 +41,8 @@ export default function HomePage({ setDeleteCard, deleted }) {
   };
 
   const handleDecline = (item) => {
-    setDeleteCard(item);
+    setDeleteCard(true);
+    setDeleteId(item.tracking_id);
   };
 
   const navigation = useNavigation();
@@ -144,13 +145,17 @@ export default function HomePage({ setDeleteCard, deleted }) {
             return (
               <View
                 key={item.id}
-                className="flex items-start justify-start w-full rounded-xl py-4 px-4 bg-[#FCFCFD] border-[1px] border-[#DDDDDD] mb-5"
+                className={`flex items-start justify-start w-full rounded-xl py-4 px-4 bg-[#FCFCFD] border-[1px] border-[#DDDDDD] mb-5 
+                ${item.status === 'DELIVERED' && 'border-green-500'}
+                ${item.status === 'ASSIGNEDTORIDER' && 'border-[#0077B6]'}
+                ${item.status === 'INTRANSIT' && 'border-yellow-500'}
+                `}
               >
                 {/* PACKAGE */}
                 <View className="flex flex-row items-center justify-start w-full">
                   <Bag />
                   <Text
-                    className={`text-[#667085] text-xs font-['medium'] ml-3`}
+                    className={`text-[#667085] text-xs w-[80%] font-['medium'] ml-3`}
                   >
                     PACKAGE {item.id}
                   </Text>
@@ -211,7 +216,7 @@ export default function HomePage({ setDeleteCard, deleted }) {
                     <Text
                       className={`text-[#1D2939] text-xl font-['bold'] mt-1`}
                     >
-                      {item.status}
+                      {item.pickup_time}
                     </Text>
                   </View>
                 </View>
@@ -315,7 +320,7 @@ export default function HomePage({ setDeleteCard, deleted }) {
                         </TouchableOpacity>
                       </View>
                     ) : (
-                      item.status === "PENDING" && (
+                      item.status === "ASSIGNEDTORIDER" && (
                         <View className="flex flex-row items-center justify-between w-full mt-8">
                           <TouchableOpacity
                             onPress={() => handleAccept(item.id)}
@@ -328,7 +333,7 @@ export default function HomePage({ setDeleteCard, deleted }) {
                             </Text>
                           </TouchableOpacity>
                           <TouchableOpacity
-                            onPress={() => handleDecline(item.id)}
+                            onPress={() => handleDecline(item)}
                             className="flex items-center justify-center w-[48%] h-11 bg-[#F2F4F7] rounded-lg"
                           >
                             <Text

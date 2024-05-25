@@ -1,13 +1,15 @@
-import { Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import Box from '../../../assets/icon/box4.svg'
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useDispatch } from 'react-redux';
+import { declineOrder } from '../../features/actions/General';
 
 
 
-export default function ReasonModal({setReason, setDeleted}) {
+export default function ReasonModal({setReason, setDeleted, deleteId}) {
 
     const reasons = [
         {
@@ -31,14 +33,25 @@ export default function ReasonModal({setReason, setDeleted}) {
     const [check, setCheck] = useState(null)
     const [otherReasons, setOtherReasons] = useState(null)
     const [comment, setComment] = useState('')
+    const [cancellationReason, setCancellationReason] = useState('')
+    const [loading, setLoading] = useState(false);
+
 
     const handleCheck = (item) => {
-        setCheck((prevIndex) => (prevIndex === item ? null : item))
+        setCheck((prevIndex) => (prevIndex === item.id ? null : item.id))
+        console.log(item.title)
+        setCancellationReason(item.title)
     }
 
+    const dispatch = useDispatch();
+
+    const values = {'tracking_id': deleteId, 'reason': comment || cancellationReason}
+
     const handleDelete = () => {
-        setReason(false)
-        setDeleted(true)
+        dispatch(declineOrder(values, setDeleted, setReason, setLoading));
+        // setReason(false)
+        // console.log(values)
+        // setDeleted(true)
     }
 
 
@@ -62,10 +75,10 @@ export default function ReasonModal({setReason, setDeleted}) {
            {reasons.map((item) => {
             return(
            <View key={item.id} className='flex items-center justify-start w-full mb-5'>
-                <TouchableOpacity onPress={()=>handleCheck(item.id)}
+                <TouchableOpacity onPress={()=>handleCheck(item)}
                 className='flex flex-row items-end justify-between w-full mb-2'>
                     <Text className={`text-base text-[#475467] font-['medium']`}>{item.title}</Text>
-                    <TouchableOpacity onPress={()=>handleCheck(item.id)}
+                    <TouchableOpacity onPress={()=>handleCheck(item)}
                     className={`flex items-center justify-center h-6 w-6 rounded-full border-[1.5px] 
                                                 border-[#98A2B3] ${check === item.id && 'bg-[#0077B6] border-[#0077B6]'}`}>
 
@@ -78,11 +91,14 @@ export default function ReasonModal({setReason, setDeleted}) {
            )
            })}
 
+           {!check  &&
            <TouchableOpacity onPress={()=>setOtherReasons(true)}
            className='flex flex-row items-end justify-between w-full mb-2'>
                 <Text className={`text-base text-[#475467] font-['medium']`}>Other Reasons</Text>
                 <MaterialIcons name="arrow-forward-ios" size={12} color="#667085" />
             </TouchableOpacity>
+           }
+
         </View>
         </View>
 
@@ -105,7 +121,11 @@ export default function ReasonModal({setReason, setDeleted}) {
                     ${otherReasons && 'mt-24'}`}
         disabled={!check && comment === ''}
         >
+         {loading ? (
+            <ActivityIndicator size="large" color="#ffffff" />
+          ) : (
             <Text className={`text-base text-[#FFFFFF] font-['bold']`}>Done</Text>
+          )}
         </TouchableOpacity>
 
     </View>
